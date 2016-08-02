@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="org.freecomms" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>FreeComms</name>
+    <description>
+       Free and private communication is a human right. No government, entity, or person shall infringe that right or otherwise take that right from the people.
+    </description>
+    <author email="ahanna@alumni.mines.edu" href="http://freecomms.org">
+        FreeComm.org
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-intent href="stun:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <hook src="hooks/after_platform_add/iosrtc-swift-support.js" type="after_platform_add" />
+    </platform>
+    <engine name="ios" spec="~4.2.0" />
+    <engine name="android" spec="~5.2.1" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="cordova-plugin-iosrtc" spec="~3.1.0" />
+    <plugin name="cordova-plugin-device" spec="~1.1.2" />
+</widget>
