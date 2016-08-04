@@ -1,28 +1,37 @@
 <template>
   <div id="app">
-    <chat></chat>
+    <home></home>
+    <my-footer></my-footer>
   </div>
 </template>
 
 <script>
-  console.log("app");
-  
-  import Chat from './components/Chat'
+  import Home from './components/Home'
+  import MyFooter from './components/Footer'
 
   export default {
     components: {
-      Chat
+      Home,
+      MyFooter
     }
   }
 </script>
 
 <style>
-  body {
-      padding: 0;
-      margin: 0;
-  }
   html, body, #app {
       width: 100%;
       height: 100%;
+
+      overflow: hidden;
+
+      padding: 0;
+      margin: 0;
+  }
+
+  .fade-transition {
+    transition: opacity .3s ease;
+  }
+  .fade-enter, .fade-leave {
+    opacity: 0;
   }
 </style>

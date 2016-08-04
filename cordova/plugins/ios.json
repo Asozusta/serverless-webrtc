@@ -18,7 +18,23 @@
         },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "org.freecomms"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "org.freecomms"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "org.freecomms"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "org.freecomms"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "org.freecomms"
+        }
+    }
 }

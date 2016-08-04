@@ -11,5 +11,7 @@
     "libc++.dylib": 2,
     "libstdc++.dylib": 2,
     "libsqlite3.0.dylib": 2,
-    "VideoToolbox.framework": 2
+    "VideoToolbox.framework": 2,
+    "Social.framework": 1,
+    "MessageUI.framework": 1
 }
