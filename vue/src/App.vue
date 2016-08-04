@@ -1,18 +1,16 @@
 <template>
   <div id="app">
     <home></home>
-    <my-footer></my-footer>
+    <!-- <my-footer></my-footer> -->
   </div>
 </template>
 
 <script>
   import Home from './components/Home'
-  import MyFooter from './components/Footer'
 
   export default {
     components: {
-      Home,
-      MyFooter
+      Home
     }
   }
 </script>

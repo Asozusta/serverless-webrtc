@@ -1,7 +1,20 @@
 <template>
   <div id="mainContainer" class="container">
-    <video-chat v-show="commsMethodIsSelected('video-chat')" transition="fade" transition-mode="out-in"></video-chat>
-    <text-chat v-show="commsMethodIsSelected('text-chat')" transition="fade" transition-mode="out-in"></text-chat>
+    <fieldset class="well">
+      <div id="chatlog" class="text-info">
+      </div>
+    </fieldset>
+    <div id="videoWrapper">
+      <video id="localVideo"></video>
+      <video id="remoteVideo"></video>
+    </div>
+    <div id="chatWrapper">
+      <form class="form-inline" v-on:submit.prevent="sendMessage" action="">
+        <textarea id="messageTextBox" type="text" placeholder="Type your message here"></textarea>
+        <button id="sendMessageBtn" type="submit" class="btn btn-primary">Send message</button>
+      </form>
+    </div>
+
 
     <div class="modal fade" id="showLocalOffer" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden>
       <div class="modal-dialog" role="document">
@@ -165,30 +178,8 @@
 
 <script>
   import Store from '../store/store.js'
-  import VideoChat from './VideoChat'
-  import TextChat from './TextChat'
   import MyRTC from '../assets/js/WebRTC.js'
   import PNGStorage from '../assets/js/PNGStorage.js'
-
-  function setVideoProperties() {
-    var containerWidth = $("#videoChatWrapper").width();
-    var containerHeight = $("#videoChatWrapper").height();
-
-    // is the container tall enough? vids are 4:3; there are 2 streams
-    if ( containerHeight >= 2 * ( containerWidth * 3 / 4 ) ) {
-      // container is tall enough
-      $("video").css({
-        "width": containerWidth,
-        "height": 3 / 4 * containerWidth
-      });
-    } else {
-      // container is not tall enough
-      $("video").css({
-        "width": ( containerHeight / 2 ) * 4 / 3,
-        "height": containerHeight / 2
-      });
-    };
-  }
 
   function run() {
     $('#showLocalOffer').modal('hide')
@@ -270,8 +261,7 @@
 
   export default {
     components: {
-      VideoChat,
-      TextChat
+      
     },
     data: function() {
         return {
@@ -281,8 +271,6 @@
         };
     },
     ready: function() {
-      setVideoProperties();
-
       if ( navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ) {
         // cordova!
         this.bCordova = true;
@@ -304,9 +292,6 @@
       };
     },
     methods: {
-      commsMethodIsSelected: function (selectedMethod) {
-        return this.sharedState.viewEnabled === selectedMethod;
-      },
       changeCodeMethod: function() {
         this.codeDescription = ( $('#codeTypeInput').is(':checked') ) ? 'image' : 'text';
       },
@@ -381,6 +366,19 @@
         } else {
           // no img selected
         }
+      },
+      sendMessage: function() {
+        if ($('#messageTextBox').val()) {
+          var channel = new window.myRTC.RTCMultiSession()
+          window.myRTC.writeToChatLog($('#messageTextBox').val(), 'text-success')
+          channel.send({message: $('#messageTextBox').val()})
+          $('#messageTextBox').val('')
+
+          // Scroll chat text area to the bottom on new input.
+          $('#chatlog').scrollTop($('#chatlog')[0].scrollHeight)
+        }
+
+        return false
       }
     },
     computed: {
@@ -391,9 +389,34 @@
 
 <style scoped>
   #mainContainer {
-    height: calc(100% - 50px);
+    height: 100%;
+    width: 100%;
 
     padding: 15px;
+  }
+
+  #videoWrapper {
+    width: 100%;
+    height: calc((100% - 100px - 30px) * .35);
+
+    position: relative;
+
+    text-align: center;
+  }
+
+  #localVideo {
+    height: 100%;
+    width: auto;
+  }
+
+  #remoteVideo {
+    height: 35%;
+    width: auto;
+
+    position: absolute;
+
+    left: 5%;
+    bottom: 5%;
   }
 
   img {
@@ -475,13 +498,126 @@
 
     text-align: center;
   }
+
   .custom-file-input:hover::before {
     border-color: white;
   }
+
   .custom-file-input:active::before {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
   }
+
   .custom-file-input:focus {
     outline: none;
+  }
+
+  #chatWrapper {
+    height: 100px;
+    width: 100%;
+
+    display: inline-block;
+  }
+
+  #chatWrapper form {
+    text-align: center;
+  }
+
+  #chatlog {
+    width: 100%;
+    height: 100%;
+
+    overflow-y: auto;
+  }
+
+  #messageTextBox {
+    width: 100%;
+    height: 50px;
+
+    resize: none;
+
+    /*
+    border: solid 1px #dcdcdc;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.05),0 1px 0 rgba(255,255,255,.1);
+    */
+  }
+
+  #chatWrapper button {
+    margin-top: 3px;
+  }
+
+  fieldset.well {
+    height: calc((100% - 100px - 30px) * .65);
+  }
+
+  #chatWrapper input[type=text], textarea {
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid #DDDDDD;
+  }
+ 
+  #chatWrapper input[type=text]:focus, textarea:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid rgba(81, 203, 238, 1);
+  }
+
+  .bubbleLeft {
+    position: relative;
+    width: 250px;
+    height: 100px;
+    padding: 0px;
+    background: #D7E4ED;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 10px 0px #A8A8A8;
+    -moz-box-shadow: 2px 2px 10px 0px #A8A8A8;
+    box-shadow: 2px 2px 10px 0px #A8A8A8;
+  }
+
+  .bubbleLeft:after {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: -15px;
+    border-style: solid;
+    border-width: 15px 15px 15px 0;
+    border-color: transparent #D7E4ED;
+    display: block;
+    width: 0;
+    z-index: 1;
+  }
+
+  .bubbleRight {
+    position: relative;
+    width: 250px;
+    height: 100px;
+    padding: 0px;
+    background: #EEEEEE;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 10px 0px #A8A8A8;
+    -moz-box-shadow: 2px 2px 10px 0px #A8A8A8;
+    box-shadow: 2px 2px 10px 0px #A8A8A8;
+  }
+
+  .bubbleRight:after {
+    content: "";
+    position: absolute;
+    top: 7px;
+    right: -15;
+    border-style: solid;
+    border-width: 15px 0 15px 15px;
+    border-color: transparent #EEEEEE;
+    display: block;
+    width: 0;
+    z-index: 1;
   }
 </style>
