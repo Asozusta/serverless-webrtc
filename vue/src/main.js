@@ -1,5 +1,3 @@
-console.log("main");
-
 // just double check that console logs are available in debugger
 function onDeviceReady() {
     if (window.cordova.logger) {
