@@ -31,22 +31,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-media": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-media"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-file": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-file"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "cordova-plugin-compat": {
         "source": {
             "type": "registry",
@@ -67,6 +51,22 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-x-socialsharing"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-settings-hook": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-settings-hook@~0.2.3"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-splashscreen": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-splashscreen"
         },
         "is_top_level": true,
         "variables": {}
