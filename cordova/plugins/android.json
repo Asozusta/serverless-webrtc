@@ -7,34 +7,30 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
-        },
-        "cordova-plugin-iosrtc": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "org.unicomm"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+            "PACKAGE_NAME": "org.unicomm"
         },
-        "cordova-plugin-console": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
-        },
-        "cordova-plugin-media": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
+        "cordova-plugin-iosrtc": {
+            "PACKAGE_NAME": "org.unicomm"
         },
         "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "org.freecomms"
+            "PACKAGE_NAME": "org.unicomm"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "org.unicomm"
         },
         "cordova-plugin-x-socialsharing": {
-            "PACKAGE_NAME": "org.freecomms"
+            "PACKAGE_NAME": "org.unicomm"
+        },
+        "cordova-plugin-settings-hook": {
+            "PACKAGE_NAME": "org.unicomm"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "org.unicomm"
         }
     },
-    "dependent_plugins": {
-        "cordova-plugin-compat": {
-            "PACKAGE_NAME": "io.cordova.hellocordova"
-        }
-    }
+    "dependent_plugins": {}
 }

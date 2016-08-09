@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.freecomms" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.unicomm" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Device">
         <param name="browser-package" value="Device" />
     </feature>
-    <name>FreeComms</name>
+    <name>UniComm</name>
     <description>
-       Free and private communication is a human right. No government, entity, or person shall infringe that right or otherwise take that right from the people.
+       Free, private communication is a human right that no government, entity, or person shall infringe upon. UniComm provides a secure, opensource, p2p channel that protects this right for the people. Use UniComm to directly chat with other people, through an encrypted channel, without a third party in between.
     </description>
-    <author email="ahanna@alumni.mines.edu" href="http://freecomms.org">
-        FreeComm.org
+    <author email="ahanna@alumni.mines.edu" href="https://github.com/adam-hanna/serverless-webrtc">
+        https://github.com/adam-hanna/serverless-webrtc
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -19,4 +19,10 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-intent href="stun:*" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="4000" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="SplashScreenBackgroundColor" value="white" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#000000" />
 </widget>

@@ -1,4 +1,4 @@
-import PNGStorage from './PNGStorage.js'
+import pngCipher from './pngCipher-0.0.7.min.js'
 
 window.myRTC                             = {};
 
@@ -217,6 +217,7 @@ function build() {console.log("building");
         console.log('data channel connect')
         $('#waitForConnection').modal('hide')
         $('#waitForConnection').remove()
+        $('.modal-backdrop').hide()
       }
       window.myRTC.dc1.onmessage = function (e) {
         // console.log('Got message (window.myRTC.pc1)', e.data)
@@ -271,8 +272,9 @@ function build() {console.log("building");
   window.myRTC.pc1.onicecandidate = function (e) {
     console.log('ICE candidate (pc1)', e)
     if (e.candidate == null) {
-      $('#localOffer').html(JSON.stringify(window.myRTC.pc1.localDescription))
-      $("#localOfferImg").attr("src", PNGStorage.PNGStorage.encode(JSON.stringify(window.myRTC.pc1.localDescription)))
+      pngCipher.encode(JSON.stringify(window.myRTC.pc1.localDescription), function(hash) {
+        $("#localOfferImg").attr("src", "data:image/png;base64," + hash);
+      });
     }
   }
 
@@ -343,6 +345,7 @@ function build() {console.log("building");
       console.log('data channel connect')
       $('#waitForConnection').modal('hide')
       $('#waitForConnection').remove()
+      $('.modal-backdrop').hide()
     }
     window.myRTC.dc2.onmessage = function (e) {
       console.log('Got message (pc2)', e.data)
@@ -375,8 +378,9 @@ function build() {console.log("building");
   window.myRTC.pc2.onicecandidate = function (e) {
     console.log('ICE candidate (pc2)', e)
     if (e.candidate == null) {
-      $('#localAnswer').html(JSON.stringify(window.myRTC.pc2.localDescription));
-      $("#localAnswerImg").attr("src", PNGStorage.PNGStorage.encode(JSON.stringify(window.myRTC.pc2.localDescription)))
+      pngCipher.encode(JSON.stringify(window.myRTC.pc2.localDescription), function(hash) {
+        $("#localAnswerImg").attr("src", "data:image/png;base64," + hash);
+      });
     }
   }
 

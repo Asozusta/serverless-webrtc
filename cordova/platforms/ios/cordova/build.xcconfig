@@ -41,6 +41,6 @@ CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES
 // (CB-10072) 
 SWIFT_OBJC_BRIDGING_HEADER = $(PROJECT_DIR)/$(PROJECT_NAME)/Bridging-Header.h
 LD_RUNPATH_SEARCH_PATHS = @executable_path/Frameworks
-SWIFT_OBJC_BRIDGING_HEADER = FreeComms/Plugins/cordova-plugin-iosrtc/cordova-plugin-iosrtc-Bridging-Header.h
+SWIFT_OBJC_BRIDGING_HEADER = UniComm/Plugins/cordova-plugin-iosrtc/cordova-plugin-iosrtc-Bridging-Header.h
 IPHONEOS_DEPLOYMENT_TARGET = 9.2
 ENABLE_BITCODE = NO
