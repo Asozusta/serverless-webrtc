@@ -7,8 +7,8 @@
           </div>
         </fieldset>
         <div id="videoWrapper">
-          <video id="localVideo" muted="muted"></video>
-          <video id="remoteVideo"></video>
+          <video id="localVideo" class="z10" muted="muted"></video>
+          <video id="remoteVideo" class="z5" ></video>
         </div>
         <div id="chatWrapper">
           <form class="form-inline" v-on:submit.prevent="sendMessage" action="">
@@ -19,9 +19,9 @@
       </div>
       <div id="desktopView" class="hidden-xs hidden-sm col-md-12 col-lg-12 col-xl-12">
         <div id="videoWrapper">
-          <video id="localVideo" muted="muted"></video>
+          <video id="localVideo" muted="muted" class="z10"></video>
           <div></div>
-          <video id="remoteVideo"></video>
+          <video id="remoteVideo" class="z5"></video>
         </div>
         <div id="chatWrapper">
           <fieldset class="well">
@@ -170,6 +170,7 @@
         var video = document.getElementById('localVideo')
         video.src = window.URL.createObjectURL(stream)
         video.play()
+        // if ( navigator.userAgent.match(/(iPhone|iPod|iPad)/) ) $("#localVideo").hide()
         window.myRTC.pc2.addStream(stream)
       }, function (error) {
         console.log('Error adding stream to pc2: ' + error)
@@ -227,6 +228,37 @@
 
       window.myRTC.sendFile(file)
     })
+
+    if ( navigator.userAgent.match(/(iPhone|iPod|iPad)/) ) {
+      $("#localVideo").removeClass("z10");
+      $("#localVideo").addClass("zMinus1");
+      $("#remoteVideo").removeClass("z5");
+      $("#remoteVideo").addClass("zMinus5");
+      $("html, body, #app, #mainContainer, #mainContainer > .row, #mobileView, #mobileView #videoWrapper").css({
+        "background-color": "transparent"
+      })
+
+      $("#messageTextBox").on("blur", function() {console.log("blur");
+        setTimeout(function(){
+          $("#localVideo").show();
+          $("#remoteVideo").show();
+          cordova.plugins.iosrtc.refreshVideos();
+          $("#localVideo").hide();
+          $("#remoteVideo").hide();
+        }, 700);
+      })
+
+      $(window).on("resize", function() {console.log("resize");
+        setTimeout(function(){
+          $("#localVideo").show();
+          $("#remoteVideo").show();
+          cordova.plugins.iosrtc.refreshVideos();
+          $("#localVideo").hide();
+          $("#remoteVideo").hide();
+        }, 700);
+      })
+    }
+
     console.log("done running");
   }
 
@@ -378,6 +410,8 @@
   #mobileView #remoteVideo {
     height: 100%;
     width: auto;
+
+    position: relative;
   }
 
   #mobileView #localVideo {

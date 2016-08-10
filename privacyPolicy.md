@@ -1,0 +1,1 @@
+We don't store your data. No data is ever transmitted to us, ever.

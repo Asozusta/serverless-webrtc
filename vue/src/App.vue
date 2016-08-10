@@ -26,10 +26,25 @@
       margin: 0;
   }
 
+  
+
   .fade-transition {
     transition: opacity .3s ease;
   }
   .fade-enter, .fade-leave {
     opacity: 0;
+  }
+
+  .zMinus5 {
+    z-index: -5
+  }
+  .zMinus1 {
+    z-index: -1;
+  }
+  .z10 {
+    z-index: 10;
+  }
+  .z5 {
+    z-index: 5;
   }
 </style>
