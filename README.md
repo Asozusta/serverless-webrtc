@@ -16,18 +16,18 @@ Free and open communication is a human right. Without it, the spread of ideas is
 I believe that the only technologies that protect this right are decentralized, encrypted, peer-to-peer and open source. To that end, I hope this little project may be a slight contribution.
 
 ## Preview
-<img src="./desktop.png" width="250">
+<img src="desktop.png" width="250">
 
-<img src="./mobile_wPhone.png" width="250">
+<img src="mobile-wPhone.png" width="250">
 
 ## Usage
 ### Web
 To start the web version (for various reasons, running from the static index.html file in the cordova/platforms/browser/www folder may not work):
 
 ~~~ bash
-serverless-webrtc 		  $ cd vue
-serverless-webrtc/vue   $ npm install
-serverless-webrtc/vue 	$ npm run dev
+$ git clone https://github.com/adam-hanna/serverless-webrtc.git && cd serverless-webrtc && cd vue
+$ npm install
+$ npm run dev
 ~~~
 
 ### iOS
@@ -36,22 +36,24 @@ Unfortunately, Apple wouldn't approve this app. In their opinion, it violated on
 However, you can still get this app on your iOS device, just follow the instructions below.
 
 ~~~ bash
-serverless-webrtc 			  $ cd vue
-serverless-webrtc/vue     $ npm install
-serverless-webrtc/vue 		$ npm run build
-serverless-webrtc/vue 		$ cd .. && cd cordova
-serverless-webrtc/cordova $ cordova build ios
+$ git clone https://github.com/adam-hanna/serverless-webrtc.git && cd serverless-webrtc && cd vue
+$ npm install
+$ npm run build
+$ cd .. && cd cordova
+$ cordova platform add ios
+$ cordova build ios
 ~~~
 
 Finally, using XCode, open `UniComm.xcodeproj` located in `cordova/platforms/ios` and run the app on your phone.
 
 ### Android
 ~~~ bash
-serverless-webrtc 			  $ cd vue
-serverless-webrtc/vue     $ npm install
-serverless-webrtc/vue 		$ npm run build
-serverless-webrtc/vue 		$ cd .. && cd cordova
-serverless-webrtc/cordova $ cordova build android
+$ git clone https://github.com/adam-hanna/serverless-webrtc.git && cd serverless-webrtc && cd vue
+$ npm install
+$ npm run build
+$ cd .. && cd cordova
+$ cordova platform add android
+$ cordova build android
 ~~~
 
 ## TODO
