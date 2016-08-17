@@ -12,33 +12,10 @@
 *.class
 
 # generated files - android project subfolder
-Android/bin/
-Android/gen/
-Android/assets/
+cordova/platforms/
 
-# generated files
-bin/
-gen/
-
-# Local configuration file (sdk path, etc)
-local.properties
-
-# IOS / Xcode
-build/*
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
-*.perspectivev3
-!default.perspectivev3
-*.xcworkspace
-!default.xcworkspace
-xcuserdata
-profile
-*.moved-aside
-IOS/www/
+# plugins
+cordova/plugins/
 
 # OSX
 .DS_Store
@@ -51,8 +28,8 @@ IOS/www/
 .Trashes
 
 # Vue
-node_modules/
+vue/node_modules/
 npm-debug.log
 selenium-debug.log
-test/unit/coverage
-test/e2e/reports
+vue/test/unit/coverage
+vue/test/e2e/reports
