@@ -1,0 +1,35 @@
+# ANDROID / ECLIPSE
+
+# built application files
+*.apk
+*.ap_
+*.keystore
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files - android project subfolder
+cordova/platforms/
+
+# plugins
+cordova/plugins/
+
+# OSX
+.DS_Store
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Vue
+vue/node_modules/
+npm-debug.log
+selenium-debug.log
+vue/test/unit/coverage
+vue/test/e2e/reports

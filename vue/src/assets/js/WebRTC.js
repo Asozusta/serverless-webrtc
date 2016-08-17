@@ -280,9 +280,18 @@ function build() {console.log("building");
 
   window.myRTC.handleOnaddstream = function(e) {
     console.log('Got remote stream', e.stream)
-    var el = document.getElementById('remoteVideo')
-    el.autoplay = true
-    window.myRTC.attachMediaStream(el, e.stream)
+    // var el = document.getElementById('remoteVideo')
+    // el.autoplay = true
+    // window.myRTC.attachMediaStream(el, e.stream)
+    var video = document.getElementById('remoteVideo')
+    video.src = window.URL.createObjectURL(e.stream)
+    video.play()
+    if ( navigator.userAgent.match(/(iPhone|iPod|iPad)/) ) {
+      setTimeout(function(){
+        $("#localVideo").hide();
+        $("#remoteVideo").hide();
+      }, 700);
+    }
   }
 
   window.myRTC.pc1.onaddstream = window.myRTC.handleOnaddstream
