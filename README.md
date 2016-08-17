@@ -16,8 +16,11 @@ Free and open communication is a human right. Without it, the spread of ideas is
 I believe that the only technologies that protect this right are decentralized, encrypted, peer-to-peer and open source. To that end, I hope this little project may be a slight contribution.
 
 ## Preview
+
+### Desktop
 <img src="desktop.png" width="250">
 
+### Mobile
 <img src="mobile-wPhone.png" width="250">
 
 ## Usage
@@ -36,10 +39,7 @@ Unfortunately, Apple wouldn't approve this app. In their opinion, it violated on
 However, you can still get this app on your iOS device, just follow the instructions below.
 
 ~~~ bash
-$ git clone https://github.com/adam-hanna/serverless-webrtc.git && cd serverless-webrtc && cd vue
-$ npm install
-$ npm run build
-$ cd .. && cd cordova
+$ git clone https://github.com/adam-hanna/serverless-webrtc.git && cd serverless-webrtc && cd cordova
 $ cordova platform add ios
 $ cordova build ios
 ~~~
@@ -48,10 +48,7 @@ Finally, using XCode, open `UniComm.xcodeproj` located in `cordova/platforms/ios
 
 ### Android
 ~~~ bash
-$ git clone https://github.com/adam-hanna/serverless-webrtc.git && cd serverless-webrtc && cd vue
-$ npm install
-$ npm run build
-$ cd .. && cd cordova
+$ git clone https://github.com/adam-hanna/serverless-webrtc.git && cd serverless-webrtc && cd cordova
 $ cordova platform add android
 $ cordova build android
 ~~~
