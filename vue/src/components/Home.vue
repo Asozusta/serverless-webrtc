@@ -1,7 +1,41 @@
 <template>
   <div id="mainContainer" class="container">
-    <video-chat v-show="commsMethodIsSelected('video-chat')" transition="fade" transition-mode="out-in"></video-chat>
-    <text-chat v-show="commsMethodIsSelected('text-chat')" transition="fade" transition-mode="out-in"></text-chat>
+    <div class="row">
+      <div id="mobileView" class="col-xs-12 col-sm-12 hidden-md hidden-lg hidden-xl">
+        <fieldset class="well">
+          <div id="chatlog" class="text-info">
+          </div>
+        </fieldset>
+        <div id="videoWrapper">
+          <video id="localVideo" class="z10" muted="muted"></video>
+          <video id="remoteVideo" class="z5" ></video>
+        </div>
+        <div id="chatWrapper">
+          <form class="form-inline" v-on:submit.prevent="sendMessage" action="">
+            <textarea id="messageTextBox" type="text" placeholder="Type your message here"></textarea>
+            <button id="sendMessageBtn" type="submit" class="btn btn-primary">Send message</button>
+          </form>
+        </div>
+      </div>
+      <div id="desktopView" class="hidden-xs hidden-sm col-md-12 col-lg-12 col-xl-12">
+        <div id="videoWrapper">
+          <video id="localVideo" muted="muted" class="z10"></video>
+          <div></div>
+          <video id="remoteVideo" class="z5"></video>
+        </div>
+        <div id="chatWrapper">
+          <fieldset class="well">
+            <div id="chatlog" class="text-info">
+            </div>
+          </fieldset>
+          <form class="form-inline" v-on:submit.prevent="sendMessage" action="">
+            <textarea id="messageTextBox" type="text" placeholder="Type your message here"></textarea>
+            <button id="sendMessageBtn" type="submit" class="btn btn-primary">Send message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
 
     <div class="modal fade" id="showLocalOffer" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden>
       <div class="modal-dialog" role="document">
@@ -10,22 +44,9 @@
             <h3 id="myModalLabel">Send your local offer to someone else</h3>
           </div>
           <div class="modal-body">
-            Here's your "offer" -- it tells someone else how to connect to you.  Send the whole thing to them, for example in an instant message or e-mail.  You can either send the image, or the text. You don't need to send both.
+            Here's your "offer" -- it tells someone else how to connect to you.  Send the whole thing to them, for example in an instant message or e-mail.
           <br/>
-          <form class="mySlider">
-            <fieldset>
-              <label>
-                <input id="codeTypeInput" type="checkbox" v-on:change="changeCodeMethod" checked>
-                <div>
-                  <span class="yes"><i class="fa fa-picture-o" aria-hidden="true"></i></span>
-                  <span class="no"><i class="fa fa-font" aria-hidden="true"></i></span>
-                </div>
-                <a class="slider"></a>
-              </label>  
-            </fieldset>
-          </form>
-          <img id="localOfferImg" v-show="codeMethodIsSelected('image')" transition="fade" transition-mode="out-in" />
-          <textarea class="input-large" id="localOffer" name="localOffer" rows="10" cols="100" v-show="codeMethodIsSelected('text')" transition="fade" transition-mode="out-in"></textarea>
+          <img id="localOfferImg" class="codedImg" />
           </div>
           <div class="modal-footer">
             <button id="shareButton" v-if="bCordova" v-on:click="shareLocalOffer" type="button" class="btn btn-success">Share</button>
@@ -42,22 +63,9 @@
             <h3 id="myModalLabel">Send your local answer to someone else</h3>
           </div>
           <div class="modal-body">
-            Here's your "answer" -- it tells someone else how to connect to you.  Send the whole thing to them, for example in an instant message or e-mail.  You can either send the image, or the text. You don't need to send both.
+            Here's your "answer" -- it tells someone else how to connect to you.  Send the whole thing to them, for example in an instant message or e-mail.
           <br/>
-          <form class="mySlider">
-            <fieldset>
-              <label>
-                <input id="localAnswerTypeInput" type="checkbox" v-on:change="changeLocalAnswerCodeMethod" checked>
-                <div>
-                  <span class="yes"><i class="fa fa-picture-o" aria-hidden="true"></i></span>
-                  <span class="no"><i class="fa fa-font" aria-hidden="true"></i></span>
-                </div>
-                <a class="slider"></a>
-              </label>  
-            </fieldset>
-          </form>
-          <img id="localAnswerImg" v-show="codeMethodIsSelected('image')" transition="fade" transition-mode="out-in" />
-          <textarea id="localAnswer" class="input-large" name="localAnswer" rows="10" cols="100" v-show="codeMethodIsSelected('text')" transition="fade" transition-mode="out-in" ></textarea>
+          <img id="localAnswerImg" class="codedImg" />
           </div>
           <div class="modal-footer">
             <button id="shareButton" v-if="bCordova" v-on:click="shareLocalAnswer" type="button" class="btn btn-success">Share</button>
@@ -74,25 +82,12 @@
             <h3 id="myModalLabel">Paste the "offer" you received</h3>
           </div>
           <div class="modal-body">
-            The person who created the room will send you an "offer". It will either be an image, or text. Choose the appropriate method through the button, below.
+            The person who created the room will send you an "offer". It will be a png image. Hit the "Select Image" button, below, to find it on your hard drive.
             <br/>
-            <form class="mySlider">
-              <fieldset>
-                <label>
-                  <input id="remoteOfferTypeInput" type="checkbox" v-on:change="changeRemoteOfferCodeMethod" checked>
-                  <div>
-                    <span class="yes"><i class="fa fa-picture-o" aria-hidden="true"></i></span>
-                    <span class="no"><i class="fa fa-font" aria-hidden="true"></i></span>
-                  </div>
-                  <a class="slider"></a>
-                </label>  
-              </fieldset>
-            </form>
-            <textarea id="remoteOffer" class="input-large" name="remoteOffer" rows="10" cols="100" placeholder="Paste the 'offer' string, here..." v-show="codeMethodIsSelected('text')" transition="fade" transition-mode="out-in"></textarea>
-            <img id="remoteOfferImg" v-show="codeMethodIsSelected('image')" transition="fade" transition-mode="out-in" />
+            <img id="remoteOfferImg" class="codedImg" />
           </div>
           <div class="modal-footer">
-            <input id="uploadRemoteOffer" class="custom-file-input" type="file" accept=".png" data-content='Select Image' v-show="codeMethodIsSelected('image')" transition="fade" transition-mode="out-in" v-on:change="readRemoteOffer"/>
+            <input id="uploadRemoteOffer" class="custom-file-input" type="file" accept="image/png" data-content='Select Image' v-on:change="readRemoteOffer"/>
             <button class="btn btn-primary" id="offerRecdBtn" data-dismiss="modal" aria-hidden="true">Okay, I pasted it.</button>
           </div>
         </div>
@@ -106,25 +101,12 @@
             <h3 id="myModalLabel">Paste the "answer" you received</h3>
           </div>
           <div class="modal-body">
-            Now paste in the "answer" that was sent back to you.  It will either be an image, or text. Choose the appropriate method through the button, below.
+            Now paste in the "answer" that was sent back to you.  It will be a png image. Hit the "Select Image" button, below, to find the image on your hard drive.
           <br/>
-          <form class="mySlider">
-            <fieldset>
-              <label>
-                <input id="remoteAnswerTypeInput" type="checkbox" v-on:change="changeRemoteAnswerCodeMethod" checked>
-                <div>
-                  <span class="yes"><i class="fa fa-picture-o" aria-hidden="true"></i></span>
-                  <span class="no"><i class="fa fa-font" aria-hidden="true"></i></span>
-                </div>
-                <a class="slider"></a>
-              </label>  
-            </fieldset>
-          </form>
-          <img id="remoteAnswerImg" v-show="codeMethodIsSelected('image')" transition="fade" transition-mode="out-in" />
-          <textarea class="input-large" id="remoteAnswer" name="remoteAnswer" rows="10" cols="100" placeholder="Paste the 'answer' string, here..." v-show="codeMethodIsSelected('text')" transition="fade" transition-mode="out-in"></textarea>
+          <img id="remoteAnswerImg" class="codedImg" />
           </div>
           <div class="modal-footer">
-            <input id="uploadRemoteAnswer" class="custom-file-input" type="file" accept=".png" data-content='Select Image' v-show="codeMethodIsSelected('image')" transition="fade" transition-mode="out-in" v-on:change="readRemoteAnswer"/>
+            <input id="uploadRemoteAnswer" class="custom-file-input" type="file" accept="image/png" data-content='Select Image' v-on:change="readRemoteAnswer"/>
             <button class="btn btn-primary" id="answerRecdBtn" data-dismiss="modal" aria-hidden="true">Okay, I pasted it.</button>
           </div>
         </div>
@@ -165,30 +147,8 @@
 
 <script>
   import Store from '../store/store.js'
-  import VideoChat from './VideoChat'
-  import TextChat from './TextChat'
   import MyRTC from '../assets/js/WebRTC.js'
-  import PNGStorage from '../assets/js/PNGStorage.js'
-
-  function setVideoProperties() {
-    var containerWidth = $("#videoChatWrapper").width();
-    var containerHeight = $("#videoChatWrapper").height();
-
-    // is the container tall enough? vids are 4:3; there are 2 streams
-    if ( containerHeight >= 2 * ( containerWidth * 3 / 4 ) ) {
-      // container is tall enough
-      $("video").css({
-        "width": containerWidth,
-        "height": 3 / 4 * containerWidth
-      });
-    } else {
-      // container is not tall enough
-      $("video").css({
-        "width": ( containerHeight / 2 ) * 4 / 3,
-        "height": containerHeight / 2
-      });
-    };
-  }
+  import pngCipher from '../assets/js/pngCipher-0.0.7.min.js'
 
   function run() {
     $('#showLocalOffer').modal('hide')
@@ -210,6 +170,7 @@
         var video = document.getElementById('localVideo')
         video.src = window.URL.createObjectURL(stream)
         video.play()
+        // if ( navigator.userAgent.match(/(iPhone|iPod|iPad)/) ) $("#localVideo").hide()
         window.myRTC.pc2.addStream(stream)
       }, function (error) {
         console.log('Error adding stream to pc2: ' + error)
@@ -222,22 +183,22 @@
     })
 
     $('#offerRecdBtn').click(function () {
-      var offer = $('#remoteOffer').val();console.log(offer);
-      if ( !offer ) {
-        offer = PNGStorage.PNGStorage.decode($("#remoteOfferImg").attr("src"), function(data) {
-          var offerDesc = new window.myRTC.RTCSessionDescription(JSON.parse(atob(data)))
-          console.log('Received remote offer', offerDesc)
-          window.myRTC.writeToChatLog('Received remote offer', 'text-success')
-          window.myRTC.handleOfferFromPC1(offerDesc)
-          $('#showLocalAnswer').modal('show')
-        });
-      } else {
-        var offerDesc = new window.myRTC.RTCSessionDescription(JSON.parse(offer))
-        console.log('Received remote offer', offerDesc)
-        window.myRTC.writeToChatLog('Received remote offer', 'text-success')
-        window.myRTC.handleOfferFromPC1(offerDesc)
-        $('#showLocalAnswer').modal('show')
-      }
+      var offer = $("#remoteOfferImg").attr("src").replace("data:image/png;base64,", "");
+      pngCipher.decode(
+        offer,
+        function(error) {
+          if ( error ) alert("There's been an error!\n\n" + error);
+        },
+        function(text) {
+          if ( text ) {
+            var offerDesc = new window.myRTC.RTCSessionDescription(JSON.parse(text))
+            console.log('Received remote offer', offerDesc)
+            window.myRTC.writeToChatLog('Received remote offer', 'text-success')
+            window.myRTC.handleOfferFromPC1(offerDesc)
+            $('#showLocalAnswer').modal('show')
+          }
+        }
+      );
     })
 
     $('#answerSentBtn').click(function () {
@@ -245,18 +206,20 @@
     })
 
     $('#answerRecdBtn').click(function () {
-      var answer = $('#remoteAnswer').val()
-      if ( !answer ) {
-        answer = PNGStorage.PNGStorage.decode($("#remoteAnswerImg").attr("src"), function(data) {
-          var answerDesc = new window.myRTC.RTCSessionDescription(JSON.parse(atob(data)))
-          window.myRTC.handleAnswerFromPC2(answerDesc)
-          $('#waitForConnection').modal('show')
-        });
-      } else {
-        var answerDesc = new window.myRTC.RTCSessionDescription(JSON.parse(answer))
-        window.myRTC.handleAnswerFromPC2(answerDesc)
-        $('#waitForConnection').modal('show')
-      }
+      var answer = $("#remoteAnswerImg").attr("src").replace("data:image/png;base64,", "");
+      pngCipher.decode(
+        answer,
+        function(error) {
+          if ( error ) alert("There's been an error!\n\n" + error);
+        },
+        function(text) {
+          if ( text ) {
+            var answerDesc = new window.myRTC.RTCSessionDescription(JSON.parse(text))
+            window.myRTC.handleAnswerFromPC2(answerDesc)
+            $('#waitForConnection').modal('show')
+          }
+        }
+      );
     })
 
     $('#fileBtn').change(function () {
@@ -265,27 +228,55 @@
 
       window.myRTC.sendFile(file)
     })
+
+    if ( navigator.userAgent.match(/(iPhone|iPod|iPad)/) ) {
+      $("#localVideo").removeClass("z10");
+      $("#localVideo").addClass("zMinus1");
+      $("#remoteVideo").removeClass("z5");
+      $("#remoteVideo").addClass("zMinus5");
+      $("html, body, #app, #mainContainer, #mainContainer > .row, #mobileView, #mobileView #videoWrapper").css({
+        "background-color": "transparent"
+      })
+
+      $("#messageTextBox").on("blur", function() {console.log("blur");
+        setTimeout(function(){
+          $("#localVideo").show();
+          $("#remoteVideo").show();
+          cordova.plugins.iosrtc.refreshVideos();
+          $("#localVideo").hide();
+          $("#remoteVideo").hide();
+        }, 700);
+      })
+
+      $(window).on("resize", function() {console.log("resize");
+        setTimeout(function(){
+          $("#localVideo").show();
+          $("#remoteVideo").show();
+          cordova.plugins.iosrtc.refreshVideos();
+          $("#localVideo").hide();
+          $("#remoteVideo").hide();
+        }, 700);
+      })
+    }
+
     console.log("done running");
   }
 
   export default {
     components: {
-      VideoChat,
-      TextChat
+      
     },
     data: function() {
         return {
             'sharedState': Store.state.appData,
-            'codeDescription': 'image',
             'bCordova': true
         };
     },
     ready: function() {
-      setVideoProperties();
-
       if ( navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ) {
         // cordova!
         this.bCordova = true;
+        $("#desktopView").remove();
 
         if ( window.device ) {
           // device ready
@@ -296,51 +287,24 @@
             run();
           });
         };
-      } else {
+      } else {console.log("not cordova");
         // not cordova
         this.bCordova = false;
+        $("#mobileView").remove();
 
         run();
       };
     },
     methods: {
-      commsMethodIsSelected: function (selectedMethod) {
-        return this.sharedState.viewEnabled === selectedMethod;
-      },
-      changeCodeMethod: function() {
-        this.codeDescription = ( $('#codeTypeInput').is(':checked') ) ? 'image' : 'text';
-      },
-      changeLocalAnswerCodeMethod: function() {
-        this.codeDescription = ( $('#localAnswerTypeInput').is(':checked') ) ? 'image' : 'text';
-      },
-      changeRemoteOfferCodeMethod: function() {
-        this.codeDescription = ( $('#remoteOfferTypeInput').is(':checked') ) ? 'image' : 'text';
-      },
-      changeRemoteAnswerCodeMethod: function() {
-        this.codeDescription = ( $('#remoteAnswerTypeInput').is(':checked') ) ? 'image' : 'text';
-      },
-      codeMethodIsSelected: function(selectedMethod) {
-        return this.codeDescription === selectedMethod;
-      },
       shareLocalOffer: function() {
         var options = {};
-
-        if ( this.codeDescription === 'image' ) {
-          options['files'] =  $("#localOfferImg").attr("src");
-        } else {
-          options['message'] = $('#localOffer').html();
-        };
+        options['files'] = [$("#localOfferImg").attr("src")];
 
         window.plugins.socialsharing.shareWithOptions(options, function() {}, function() {});
       },
       shareLocalAnswer: function() {
         var options = {};
-
-        if ( this.codeDescription === 'image' ) {
-          options['files'] =  $("#localAnswerImg").attr("src");
-        } else {
-          options['message'] = $('#localAnswer').html();
-        };
+        options['files'] = [$("#localAnswerImg").attr("src")];
 
         window.plugins.socialsharing.shareWithOptions(options, function() {}, function() {});
       },
@@ -381,6 +345,19 @@
         } else {
           // no img selected
         }
+      },
+      sendMessage: function() {
+        if ($('#messageTextBox').val()) {
+          var channel = new window.myRTC.RTCMultiSession()
+          window.myRTC.writeToChatLog($('#messageTextBox').val(), 'text-success')
+          channel.send({message: $('#messageTextBox').val()})
+          $('#messageTextBox').val('')
+
+          // Scroll chat text area to the bottom on new input.
+          $('#chatlog').scrollTop($('#chatlog')[0].scrollHeight)
+        }
+
+        return false
       }
     },
     computed: {
@@ -391,12 +368,68 @@
 
 <style scoped>
   #mainContainer {
-    height: calc(100% - 50px);
+    height: 100%;
+    width: 100%;
 
     padding: 15px;
   }
 
-  img {
+  #mainContainer .row {
+    height: 100%;
+  }
+
+  #mobileView, #desktopView {
+    width: 100%;
+    height: 100%;
+  }
+
+  #mobileView #videoWrapper {
+    width: 100%;
+    height: calc((100% - 100px - 30px) * .35);
+
+    position: relative;
+
+    text-align: center;
+
+    background-color: black;
+  }
+
+  #desktopView #videoWrapper {
+    width: 50%;
+    height: 100%;
+
+    text-align: center;
+
+    background-color: black;
+
+    display: inline-block;
+
+    float: left;
+  }
+
+  #mobileView #remoteVideo {
+    height: 100%;
+    width: auto;
+
+    position: relative;
+  }
+
+  #mobileView #localVideo {
+    height: 35%;
+    width: auto;
+
+    position: absolute;
+
+    left: 5%;
+    bottom: 5%;
+  }
+
+  #desktopView #localVideo, #desktopView #remoteVideo {
+    height: 50%;
+    width: auto;
+  }
+
+  .codedImg {
     width: 50%;
     height: auto;
 
@@ -407,6 +440,11 @@
     max-height: calc(100vh - 60px - 155px - 10px); /* 60 for margin, 155 for modal header/footer and 10 for buffer */
 
     overflow-y: auto;
+  }
+
+  #desktopView textarea {
+    width: 100%;
+    height: 70px;
   }
 
   textarea {
@@ -475,13 +513,268 @@
 
     text-align: center;
   }
+
   .custom-file-input:hover::before {
     border-color: white;
   }
+
   .custom-file-input:active::before {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
   }
+
   .custom-file-input:focus {
     outline: none;
+  }
+
+  #mobileView #chatWrapper {
+    height: 100px;
+    width: 100%;
+
+    display: inline-block;
+
+    float: right;
+  }
+
+  #desktopView #chatWrapper {
+    height: 100%;
+    width: 50%;
+
+    padding-left: 45px;
+    padding-bottom: 15px;
+
+    display: inline-block;
+  }
+
+  #mobileView #chatWrapper form, #desktopView #chatWrapper form {
+    text-align: center;
+  }
+
+  #mobileView #chatlog {
+    width: 100%;
+    height: 100%;
+
+    overflow-y: auto;
+  }
+
+  #mobileView #messageTextBox {
+    width: 100%;
+    height: 50px;
+
+    resize: none;
+
+    /*
+    border: solid 1px #dcdcdc;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.05),0 1px 0 rgba(255,255,255,.1);
+    */
+  }
+
+  #chatWrapper button {
+    margin-top: 3px;
+  }
+
+  #mobileView fieldset.well {
+    height: calc((100% - 100px - 30px) * .65);
+  }
+
+  #desktopView fieldset.well {
+    height: calc(100% - 125px);
+  }
+
+  #chatWrapper input[type=text], textarea {
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid #DDDDDD;
+  }
+ 
+  #chatWrapper input[type=text]:focus, textarea:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    padding: 3px 0px 3px 3px;
+    margin: 5px 1px 3px 0px;
+    border: 1px solid rgba(81, 203, 238, 1);
+  }
+
+  .bubbleLeft {
+    position: relative;
+    width: 250px;
+    height: 100px;
+    padding: 0px;
+    background: #D7E4ED;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 10px 0px #A8A8A8;
+    -moz-box-shadow: 2px 2px 10px 0px #A8A8A8;
+    box-shadow: 2px 2px 10px 0px #A8A8A8;
+  }
+
+  .bubbleLeft:after {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: -15px;
+    border-style: solid;
+    border-width: 15px 15px 15px 0;
+    border-color: transparent #D7E4ED;
+    display: block;
+    width: 0;
+    z-index: 1;
+  }
+
+  .bubbleRight {
+    position: relative;
+    width: 250px;
+    height: 100px;
+    padding: 0px;
+    background: #EEEEEE;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 10px 0px #A8A8A8;
+    -moz-box-shadow: 2px 2px 10px 0px #A8A8A8;
+    box-shadow: 2px 2px 10px 0px #A8A8A8;
+  }
+
+  .bubbleRight:after {
+    content: "";
+    position: absolute;
+    top: 7px;
+    right: -15;
+    border-style: solid;
+    border-width: 15px 0 15px 15px;
+    border-color: transparent #EEEEEE;
+    display: block;
+    width: 0;
+    z-index: 1;
+  }
+
+  .mySlider i {
+    position: relative;
+    top: -3px;
+  }
+  /* Thanks!
+   * https://codepen.io/jarmie/pen/tFqJH
+   */
+
+  .mySlider label {
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    border: 3px solid rgba(0,0,0,0.07);
+    border-radius: 17px;
+    position: relative;
+    box-shadow:  inset 1px 1px 1px 1px rgba(0,0,0,0.4), 0px 0px 0px 1px rgba(0,0,0,0.1), 0px 0px 0px 2px rgba(0,0,0,0.1), 0px 0px 4px 2px rgba(0,0,0,0.07);
+    margin: 0px;
+  }
+
+  .mySlider input {
+    display: none;
+  }
+  
+  .mySlider input:checked ~ a {
+    left: 50%;
+  }
+  
+  .mySlider input:checked ~ div span {
+    background-color: rgba(0,158,255,0.5);
+  }
+  
+  .mySlider label span {
+    z-index: 1;
+    position: absolute;
+    display: inline-block;
+    height: 24px;
+    left: 0;
+    width: 50%;
+    border-radius: 15px 0px 0px 15px;
+    border-color: rgba(0,0,0,0.1);
+    border-style: solid;
+    border-width: 1px 0px 1px 1px;
+    background-color: rgba(200,200,200,0.5);
+    background-image:-webkit-linear-gradient(90deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.0) 100%);
+    text-align: center;
+    line-height: 30px;
+    font-family: helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: #555;
+    text-shadow: 0px 1px white;
+    -webkit-transition: all 1.0s ease-in-out;
+    -moz-transition: all 1.0s ease-in-out;
+    transition: all 1.0s ease-in-out;
+    
+
+  }
+
+  .mySlider label span.no {
+
+    left: 50%;  
+    border-radius: 0px 15px 15px 0px;     
+    border-width: 1px 1px 1px 0px;
+
+  }
+  
+  .mySlider .slider {
+    display: inline-block;
+    position: absolute;
+    width: 50%;
+    height: 24px;
+    background-color: #efefef;
+    left: 0%;
+    border-radius: 30px;
+    z-index: 2;
+    border: 1px solid rgba(0,0,0,0.2);
+    box-shadow: inset 0px 0px 5px 1px rgba(0,0,0,0.1), 0px 1px 1px 0px rgba(0,0,0,0.2);
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+
+  }
+  
+  .mySlider .slider:after, .mySlider .slider:before {
+    content: "";
+    width: 30%;
+    height: 25px;
+    position: absolute;
+    top: 2px;
+    border-radius: 50%;
+  }
+
+  .mySlider .slider:after {
+    left: 15%;
+    background-image:-webkit-linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.0) 100%);
+  }
+  .mySlider .slider:before {
+    right: 15%;
+    background-image:-webkit-linear-gradient(0deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.0) 100%);
+  }
+
+  
+  form.mySlider {
+    width: 100%;
+    margin: 0px auto;
+    font-family: georgia, times, serif;
+  }
+  
+  .mySlider fieldset {
+    padding: 10px;
+    text-align: center;
+    border-radius: 3px;
+    color: #666;
+  }
+
+  .spinner {
+    text-align: center;
+  }
+
+  .spinner img {
+    width: 25%;
+    height: auto;
+
+    display: inline-block;
   }
 </style>
